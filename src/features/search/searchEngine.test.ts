@@ -1,0 +1,5 @@
+import { describe, expect, it } from 'vitest';
+import { searchStories } from './searchStories';
+import { searchStoriesByFilters } from './searchEngine';
+const find = (query: string) => searchStoriesByFilters(searchStories, { query, categoryId: 'todos', durationId: 'any' }).map((story) => story.title);
+describe('searchStoriesByFilters', () => { it('tolerates spelling, accents and order', () => { expect(find('chapeusinho')).toContain('Chapeuzinho Vermelho'); expect(find('chapeuzinho vermelo')).toContain('Chapeuzinho Vermelho'); expect(find('farol sonhos')).toContain('O Farol dos Sonhos'); expect(find('faroll dos sonos')).toContain('O Farol dos Sonhos'); expect(find('pequeno carvalo')).toContain('O Pequeno Carvalho'); expect(find('lia estrelas')).toContain('As Aventuras de Lia e o Rio de Estrelas'); expect(find('aventuras lia')).toContain('As Aventuras de Lia e o Rio de Estrelas'); }); it('finds category labels and returns no unrelated result', () => { expect(find('fabulas')).toContain('O Pequeno Carvalho'); expect(find('fantasia')).toContain('As Aventuras de Lia e o Rio de Estrelas'); expect(find('xyzxyz')).toHaveLength(0); }); });

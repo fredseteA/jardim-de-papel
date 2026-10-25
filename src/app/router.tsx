@@ -1,0 +1,11 @@
+import { createBrowserRouter } from 'react-router-dom';
+import { AppShell } from '../components/layout/AppShell';
+import { CollectionPage } from '../pages/CollectionPage';
+import { CollectionsPage } from '../pages/CollectionsPage';
+import { HomePage } from '../pages/HomePage';
+import { LibraryPage } from '../pages/LibraryPage';
+import { NotFoundPage } from '../pages/NotFoundPage';
+import { ReaderPage } from '../pages/ReaderPage';
+import { ProfilePage } from '../pages/ProfilePage';
+import { StoryPage } from '../pages/StoryPage';
+export const router = createBrowserRouter([{ element: <AppShell />, children: [{ path: '/', element: <HomePage /> }, { path: '/biblioteca', element: <LibraryPage /> }, { path: '/colecoes', element: <CollectionsPage /> }, { path: '/colecoes/:slug', element: <CollectionPage /> }, { path: '/perfil', element: <ProfilePage /> }, { path: '/historias/:slug', element: <StoryPage /> }, { path: '/historias/:slug/ler', element: <ReaderPage /> }, { path: '*', element: <NotFoundPage /> }] }]);

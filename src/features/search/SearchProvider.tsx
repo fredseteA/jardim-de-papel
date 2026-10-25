@@ -1,0 +1,6 @@
+import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useLocation } from 'react-router-dom';
+import type { PropsWithChildren } from 'react';
+import type { SearchCategoryId, DurationFilterId } from './types';
+import { SearchContext } from './SearchContext';
+export function SearchProvider({ children }: PropsWithChildren) { const [isOpen, setIsOpen] = useState(false); const [trigger, setTrigger] = useState<HTMLButtonElement | null>(null); const [query, setQuery] = useState(''); const [categoryId, setCategoryId] = useState<SearchCategoryId>('todos'); const [durationId, setDurationId] = useState<DurationFilterId>('any'); const { pathname } = useLocation(); const closeSearch = useCallback(() => { setIsOpen(false); window.setTimeout(() => trigger?.focus(), 0); }, [trigger]); useEffect(() => { closeSearch(); }, [pathname, closeSearch]); const value = useMemo(() => ({ isOpen, openSearch: () => setIsOpen(true), closeSearch, registerTrigger: setTrigger, query, setQuery, categoryId, setCategoryId, durationId, setDurationId, clearFilters: () => { setQuery(''); setCategoryId('todos'); setDurationId('any'); } }), [isOpen, closeSearch, query, categoryId, durationId]); return <SearchContext.Provider value={value}>{children}</SearchContext.Provider>; }
