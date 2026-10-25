@@ -1,30 +1,13 @@
 # Jardim de Papel V3
 
-Fundação técnica da plataforma de histórias infantis ilustradas. O catálogo atual é estritamente demonstrativo e não representa conteúdo publicado.
+Aplicativo de histórias infantis: frontend React em `frontend/`, API FastAPI em `backend/` e documentação em `docs/`.
 
-## Desenvolvimento
+Para executar o frontend, use `cd frontend`, `npm ci` e `npm run dev`. Verificações: `npm run typecheck`, `npm run lint`, `npm test` e `npm run build`. Veja [backend/README.md](backend/README.md) para a API.
 
-Requer Node.js 20 ou superior.
+Na Vercel, configure **Root Directory** como `frontend`. O arquivo `frontend/vercel.json` fornece o fallback para as rotas client-side. A configuração remota não é alterada pelo repositório.
 
-```bash
-npm install
-npm run dev
-```
+O catálogo atual do frontend é demonstrativo. A API não é integrada a ele nesta etapa.
 
-## Verificações
+## Integração local frontend/backend
 
-```bash
-npm run typecheck
-npm run lint
-npm test
-npm run build
-```
-
-## Estrutura
-
-- `src/app`: composição do aplicativo e rotas.
-- `src/components`: componentes reutilizáveis de UI, layout e histórias.
-- `src/data`: catálogo de demonstração e contrato do repositório.
-- `src/types`: modelo editorial compartilhado pelos modos de leitura.
-- `src/pages`: telas e estados provisórios das rotas.
-- `docs`: decisões de arquitetura, design e roteiro de implementação.
+Consulte [docs/frontend-backend-integration.md](docs/frontend-backend-integration.md) para configuração, endpoints e limitações. A variável pública do frontend é `VITE_API_BASE_URL`; credenciais de banco ficam exclusivamente no backend.
