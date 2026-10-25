@@ -3,3 +3,19 @@ dist
 coverage
 .env
 .DS_Store
+
+# Python e segredos
+.env.*
+!.env.example
+.venv*/
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.uv-cache/
+.python/
+
+.vite/
+
+.uv-cache*/
+*.egg-info/
+
