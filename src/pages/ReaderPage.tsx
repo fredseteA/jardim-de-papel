@@ -1,4 +1,11 @@
-import { useParams } from 'react-router-dom';
-import { demoStories } from '../data/demoCatalog';
+import { Link, useParams } from 'react-router-dom';
+import { stories } from '../data/stories';
+import { StoryReader } from '../features/reader/StoryReader';
 import { PageLayout } from './PageLayout';
-export function ReaderPage() { const { slug } = useParams(); const story = demoStories.find((item) => item.slug === slug); return <PageLayout title={story ? `Lendo: ${story.title}` : 'Leitor'}><p className="max-w-prose leading-8 text-ink/75">O leitor completo será desenvolvido nas próximas etapas. A estrutura editorial já comporta leitura imersiva e tradicional usando os mesmos dados.</p></PageLayout>; }
+
+export function ReaderPage() {
+  const { slug } = useParams();
+  const story = stories.find((item) => item.slug === slug && item.status === 'published');
+  if (!story) return <PageLayout title="História indisponível"><p>Não encontramos esta história para leitura.</p><Link to="/biblioteca">Voltar à biblioteca</Link></PageLayout>;
+  return <StoryReader key={story.id} story={story} />;
+}

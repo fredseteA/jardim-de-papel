@@ -1,0 +1,19 @@
+.backdrop { position: fixed; inset: 0; z-index: 20; display: flex; align-items: flex-end; justify-content: center; padding: 1rem; background: rgb(8 22 16 / 65%); }
+.panel { width: min(100%, 30rem); max-height: min(85dvh, 42rem); overflow-y: auto; border-radius: 1.3rem; padding: 1.2rem; background: #fff9ea; color: #173b2c; box-shadow: 0 16px 40px rgb(0 0 0 / 28%); }
+.heading { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: 1rem; }
+.heading h2 { margin: 0; font-size: 1.5rem; line-height: 1.2; }
+.close { display: grid; width: 2.75rem; height: 2.75rem; place-items: center; flex-shrink: 0; border: 0; border-radius: 50%; background: #edf0e2; color: #173b2c; cursor: pointer; }
+.chapterList { display: grid; gap: .5rem; list-style: none; margin: 0; padding: 0; }
+.chapterList button { display: flex; width: 100%; min-height: 3.5rem; align-items: flex-start; flex-direction: column; justify-content: center; gap: .15rem; padding: .65rem .8rem; border: 1px solid #e0e3d1; border-radius: .75rem; background: #fffdf8; color: #173b2c; text-align: left; cursor: pointer; }
+.chapterList button[aria-current] { border-color: #80a188; background: #e3efe0; }
+.chapterList span { font: 600 .72rem/1.2 system-ui, sans-serif; color: #5e7867; }
+.chapterList strong { font-size: 1rem; font-weight: 400; }
+.settings { display: grid; gap: 1rem; }
+.settings p, .settings label { margin: 0; font: 500 .9rem/1.4 system-ui, sans-serif; }
+.settings label { display: block; font-weight: 700; }
+.settings output { float: right; font-weight: 500; }
+.settings input, .settings select { display: block; width: 100%; min-height: 2.75rem; margin-top: .35rem; accent-color: #286b48; }
+.settings select { padding: .5rem; border: 1px solid #becdb8; border-radius: .55rem; background: #fffdf8; color: #173b2c; }
+.settings .audioNote { color: #606e5f; font-size: .8rem; }
+.restart { min-height: 2.75rem; border: 1px solid #9daf9e; border-radius: 999px; background: transparent; color: #173b2c; cursor: pointer; }
+@media (min-width: 48rem) { .backdrop { align-items: center; } }
