@@ -1,6 +1,14 @@
 import { Link, useParams } from 'react-router-dom';
-import { demoStories } from '../data/demoCatalog';
 import { stories } from '../data/stories';
+import { StoryOpening } from '../features/story-opening/StoryOpening';
 import { PageLayout } from './PageLayout';
-import { useFavorites } from '../features/profile/useFavorites';
-export function StoryPage() { const { slug } = useParams(); const { favoriteIds, toggleFavorite } = useFavorites(); const publishedStory = stories.find((item) => item.slug === slug); const demoStory = demoStories.find((item) => item.slug === slug); const story = publishedStory ?? demoStory; if (!story) return <PageLayout title="História não encontrada"><p>Esta história não faz parte do catálogo demonstrativo.</p></PageLayout>; const summary = publishedStory?.description ?? demoStory?.synopsis ?? ''; const isFavorite = publishedStory ? favoriteIds.includes(publishedStory.id) : false; return <PageLayout title={story.title}><p className="max-w-xl text-ink/75">{summary}</p><div className="mt-7 flex flex-wrap gap-3"><Link className="inline-flex min-h-11 items-center rounded-xl bg-forest px-4 text-sm font-semibold text-ivory transition-colors hover:bg-forest/90" to={`/historias/${story.slug}/ler`}>Abrir leitor provisório</Link>{publishedStory && <button className="min-h-11 rounded-xl border border-forest/25 bg-ivory px-4 text-sm font-semibold text-forest" type="button" aria-pressed={isFavorite} onClick={() => toggleFavorite(publishedStory.id)}>{isFavorite ? 'Remover dos favoritos' : 'Salvar nos favoritos'}</button>}</div></PageLayout>; }
+
+export function StoryPage() {
+  const { slug } = useParams();
+  const story = stories.find((item) => item.slug === slug);
+
+  if (!story || story.status !== 'published') {
+    return <PageLayout title="História indisponível"><p>Esta história ainda não está disponível.</p><Link className="mt-5 inline-block text-forest underline" to="/biblioteca">Voltar à biblioteca</Link></PageLayout>;
+  }
+  return <StoryOpening story={story} />;
+}

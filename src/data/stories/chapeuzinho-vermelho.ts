@@ -5,10 +5,39 @@ import type {
 } from '../../types/story'
 import coverHero from '../../../public/assets/stories/chapeuzinho-vermelho/cover/cover-hero.webp'
 
-const demonstrativeIllustration: StoryIllustration = {
-  src: '/assets/collections/contos-encantados.jpg',
-  alt: 'Uma criança de capa vermelha atravessa uma floresta rumo a uma casa encantada.',
-}
+// Ilustrações internas geradas para esta adaptação demonstrativa; cada imagem é reutilizada em mais de uma cena.
+const sceneIllustrations = {
+  home: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/cesta-demonstrativa.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho e sua mãe preparam uma cesta.',
+    demonstrative: true,
+  },
+  forest: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/floresta-demonstrativa.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho e um filhote de cervo na floresta.',
+    demonstrative: true,
+  },
+  path: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/floresta-demonstrativa.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho caminha na floresta.',
+    demonstrative: true,
+  },
+  wolf: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/encontro-demonstrativo.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho encontra o lobo na floresta.',
+    demonstrative: true,
+  },
+  cottage: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/casa-vovo-demonstrativa.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho na porta da casa da vovó e o lobo disfarçado.',
+    demonstrative: true,
+  },
+  reunion: {
+    src: '/assets/stories/chapeuzinho-vermelho/scenes/reencontro-demonstrativo.webp',
+    alt: 'Ilustração demonstrativa: Chapeuzinho e sua avó se abraçam.',
+    demonstrative: true,
+  },
+} satisfies Record<string, StoryIllustration>
 
 const coverImages: StoryCoverImages = {
   desktop: {
@@ -35,65 +64,174 @@ export const chapeuzinhoVermelho: Story = {
   language: 'pt-BR',
   status: 'published',
   featured: true,
+  presentationMedia: {
+    previewImages: [
+      { src: '/assets/stories/chapeuzinho-vermelho/previews/cenas-demonstrativas.png', alt: 'Chapeuzinho prepara uma cesta.', demonstrative: true, spritePosition: 'top-left' },
+      { src: '/assets/stories/chapeuzinho-vermelho/previews/cenas-demonstrativas.png', alt: 'Chapeuzinho encontra um animal na floresta.', demonstrative: true, spritePosition: 'top-right' },
+      { src: '/assets/stories/chapeuzinho-vermelho/previews/cenas-demonstrativas.png', alt: 'A casa da vovó na floresta.', demonstrative: true, spritePosition: 'bottom-left' },
+      { src: '/assets/stories/chapeuzinho-vermelho/previews/cenas-demonstrativas.png', alt: 'Chapeuzinho e sua avó se encontram.', demonstrative: true, spritePosition: 'bottom-right' },
+    ],
+  },
+  // Adaptação editorial de demonstração, sujeita a revisão antes da publicação definitiva.
   chapters: [
     {
       id: 'chapter-capa-vermelha',
       slug: 'a-cesta-e-o-caminho',
-      title: 'A cesta e o caminho',
+      title: 'Uma cesta cheia de carinho',
       order: 1,
       pages: [
         {
-          id: 'page-cesta-pronta',
+          id: 'page-casa-na-floresta',
           order: 1,
-          text: 'Em uma manhã dourada, Chapeuzinho preparou uma pequena cesta para a avó. Em uma manhã dourada, Chapeuzinho preparou uma pequena cesta para a avó. Em uma manhã dourada, Chapeuzinho preparou uma pequena cesta para a avó. Em uma manhã dourada, Chapeuzinho preparou uma pequena cesta para a avó. Em uma manhã dourada, Chapeuzinho preparou uma pequena cesta para a avó.',
-          illustration: demonstrativeIllustration,
+          text: 'Numa casa à beira da floresta vivia uma menina de capa vermelha. Todos a chamavam de Chapeuzinho Vermelho, e ela adorava visitar a vovó.',
+          illustration: sceneIllustrations.home,
+        },
+        {
+          id: 'page-cesta-pronta',
+          order: 2,
+          text: 'A vovó estava descansando. Chapeuzinho e sua mãe encheram uma cesta com pão, frutas e um potinho de geleia para levar até ela.',
+          illustration: sceneIllustrations.home,
         },
         {
           id: 'page-conselho-da-mae',
-          order: 2,
-          text: 'Antes de sair, sua mãe lembrou: “Observe o caminho e volte antes de o sol se despedir.”',
-          illustration: demonstrativeIllustration,
+          order: 3,
+          text: '“Siga a trilha conhecida e, se precisar de ajuda, procure alguém de confiança”, lembrou a mãe. Chapeuzinho guardou o conselho no coração.',
+          illustration: sceneIllustrations.home,
           presentation: { textAlignment: 'center' },
+        },
+        {
+          id: 'page-despedida',
+          order: 4,
+          text: 'Com a cesta no braço, ela abraçou a mãe e partiu. O sol atravessava as folhas, iluminando o começo da trilha.',
+          illustration: sceneIllustrations.path,
         },
       ],
     },
     {
       id: 'chapter-floresta',
       slug: 'a-floresta-que-escuta',
-      title: 'A floresta que escuta',
+      title: 'O caminho pela floresta',
       order: 2,
       pages: [
         {
-          id: 'page-passarinhos',
+          id: 'page-trilha-ensolarada',
           order: 1,
-          text: 'Na floresta, passarinhos cantavam entre as folhas e o vento contava histórias baixinho.',
-          illustration: demonstrativeIllustration,
+          text: 'Chapeuzinho caminhava devagar, ouvindo o vento dançar entre as árvores. Cada passo a levava um pouquinho mais perto da casa da vovó.',
+          illustration: sceneIllustrations.path,
+        },
+        {
+          id: 'page-passarinhos',
+          order: 2,
+          text: 'Um filhote de cervo espiou entre as árvores, enquanto passarinhos cantavam no alto. A menina sorriu e continuou seguindo as marcas do caminho.',
+          illustration: sceneIllustrations.forest,
+        },
+        {
+          id: 'page-clareira-de-flores',
+          order: 3,
+          text: 'Mais adiante, uma clareira estava cheia de flores amarelas e brancas. Chapeuzinho pensou que a vovó ficaria encantada com um pequeno buquê.',
+          illustration: sceneIllustrations.forest,
         },
         {
           id: 'page-escolha-do-caminho',
+          order: 4,
+          text: 'Na bifurcação, ela viu uma trilha estreita que não conhecia. Lembrou do conselho da mãe e escolheu o caminho de sempre.',
+          illustration: sceneIllustrations.path,
+        },
+      ],
+    },
+    {
+      id: 'chapter-encontro-inesperado',
+      slug: 'um-encontro-inesperado',
+      title: 'Um encontro inesperado',
+      order: 3,
+      pages: [
+        {
+          id: 'page-encontro-com-o-lobo',
+          order: 1,
+          text: 'Um lobo apareceu entre as árvores e perguntou para onde ela ia. Chapeuzinho cumprimentou-o, mas preferiu não contar seus planos a quem não conhecia.',
+          illustration: sceneIllustrations.wolf,
+        },
+        {
+          id: 'page-conversa-na-trilha',
           order: 2,
-          text: 'Ao encontrar uma trilha desconhecida, ela escolheu seguir as marcas que conhecia.',
-          illustration: demonstrativeIllustration,
+          text: 'O lobo falou de flores bonitas perto da trilha. Chapeuzinho agradeceu e seguiu adiante, pensando no sorriso que um buquê traria à vovó.',
+          illustration: sceneIllustrations.wolf,
+        },
+        {
+          id: 'page-buque-de-flores',
+          order: 3,
+          text: 'Ela parou para colher algumas flores e, sem perceber, afastou-se um pouco do caminho. Quando notou, procurou as marcas conhecidas e voltou à trilha.',
+          illustration: sceneIllustrations.forest,
+        },
+        {
+          id: 'page-atalho-do-lobo',
+          order: 4,
+          text: 'Enquanto isso, o lobo seguiu por um atalho até a casa da vovó. Curioso, decidiu entrar sem ser convidado.',
+          illustration: sceneIllustrations.cottage,
         },
       ],
     },
     {
       id: 'chapter-casa-da-avo',
       slug: 'a-porta-azul',
-      title: 'A porta azul',
-      order: 3,
+      title: 'A casa da vovó',
+      order: 4,
       pages: [
         {
-          id: 'page-chegada',
+          id: 'page-vovo-em-seguranca',
           order: 1,
-          text: 'Quando a porta azul apareceu, Chapeuzinho respirou aliviada e bateu três vezes.',
-          illustration: demonstrativeIllustration,
+          text: 'Ao ver o lobo pela janela, a vovó procurou a guardiã da floresta e esperou em um lugar seguro. O lobo entrou na casa vazia.',
+          illustration: sceneIllustrations.cottage,
+        },
+        {
+          id: 'page-disfarce-do-lobo',
+          order: 2,
+          text: 'Lá dentro, o lobo encontrou um xale e um gorro. Vestiu os dois, deitou na cama da vovó e esperou pela menina.',
+          illustration: sceneIllustrations.cottage,
+        },
+        {
+          id: 'page-chegada',
+          order: 3,
+          text: 'Quando chegou, Chapeuzinho percebeu algo estranho. “Vovó, que orelhas grandes!”, disse, permanecendo perto da porta. “São para ouvir melhor!”, respondeu uma voz diferente.',
+          illustration: sceneIllustrations.cottage,
+        },
+        {
+          id: 'page-ajuda-da-guardia',
+          order: 4,
+          text: '“Você não é a vovó!”, disse Chapeuzinho. Nesse instante, a guardiã chegou e chamou o lobo para conversar do lado de fora.',
+          illustration: sceneIllustrations.cottage,
+        },
+      ],
+    },
+    {
+      id: 'chapter-caminho-de-volta',
+      slug: 'o-caminho-de-volta',
+      title: 'O caminho de volta',
+      order: 5,
+      pages: [
+        {
+          id: 'page-conversa-e-desculpas',
+          order: 1,
+          text: '“Entrar sem convite e assustar alguém não é brincadeira”, explicou a guardiã. O lobo pediu desculpas e prometeu respeitar os outros.',
+          illustration: sceneIllustrations.cottage,
         },
         {
           id: 'page-cha-compartilhado',
           order: 2,
-          text: 'A avó a recebeu com um abraço, e as duas dividiram chá, pão e as histórias do dia.',
-          illustration: demonstrativeIllustration,
+          text: 'A vovó voltou, abraçou Chapeuzinho e recebeu o buquê e a cesta. As duas ficaram felizes por estarem juntas e seguras.',
+          illustration: sceneIllustrations.reunion,
+        },
+        {
+          id: 'page-retorno-para-casa',
+          order: 3,
+          text: 'Depois do lanche, a guardiã acompanhou Chapeuzinho pelo caminho de volta. Ao chegar em casa, ela contou à mãe tudo o que havia acontecido.',
+          illustration: sceneIllustrations.path,
+        },
+        {
+          id: 'page-celebracao-em-familia',
+          order: 4,
+          text: 'Naquela tarde, a família repartiu o lanche e admirou as flores. Chapeuzinho aprendeu que pedir ajuda e ouvir seus sentimentos também são formas de se cuidar.',
+          illustration: sceneIllustrations.reunion,
         },
       ],
     },
