@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "story": {
+    "title": "O Jardim das Pequenas Luzes — exemplo demonstrativo",
+    "slug": "jardim-pequenas-luzes-exemplo",
+    "collection_slug": "contos-classicos",
+    "synopsis": "Lia e seu avô descobrem que pequenos gestos podem iluminar um jardim inteiro.",
+    "description": "História fictícia criada exclusivamente para demonstrar o formato de importação. Não é uma publicação oficial.",
+    "minimum_age": 4,
+    "maximum_age": 9,
+    "language": "pt-BR",
+    "estimated_narration_seconds": 120,
+    "editorial": {
+      "author": "Exemplo demonstrativo do Jardim de Papel",
+      "literary_origin": "Narrativa original fictícia para teste técnico.",
+      "reference_work": null,
+      "reference_version": null,
+      "editorial_notes": "Revisar a adaptação literária e adicionar mídias antes de considerar a publicação.",
+      "copyright_notes": "Texto de demonstração técnica; não representa uma adaptação licenciada de outra obra."
+    }
+  },
+  "chapters": [
+    {
+      "order": 1,
+      "title": "Uma semente de luz",
+      "pages": [
+        {
+          "order": 1,
+          "title": "O portão do jardim",
+          "text": "Lia abriu o portão devagar. O jardim do avô estava silencioso, coberto de folhas douradas.\n\n— Será que as flores também dormem? — perguntou ela.",
+          "illustration_description": "Lia diante de um pequeno portão de madeira, ao lado do avô, em um jardim acolhedor ao entardecer. Cores suaves e iluminação dourada.",
+          "estimated_narration_seconds": 30
+        },
+        {
+          "order": 2,
+          "title": "Uma descoberta",
+          "text": "Perto de um vaso, uma pequena luz piscou. Lia se abaixou e encontrou um vaga-lume.\n\n— Ele trouxe uma estrela no bolso! — disse, encantada.",
+          "illustration_description": "A mesma menina observa um vaga-lume junto a um vaso de barro. O avô sorri ao fundo. Manter a aparência dos personagens da página anterior.",
+          "estimated_narration_seconds": 30
+        }
+      ]
+    },
+    {
+      "order": 2,
+      "title": "Um jardim para compartilhar",
+      "pages": [
+        {
+          "order": 1,
+          "title": "O cuidado",
+          "text": "Lia e o avô regaram as flores e recolheram as folhas do caminho. Aos poucos, outros vaga-lumes apareceram entre os ramos.\n\nO jardim parecia agradecer.",
+          "illustration_description": "Lia com um regador pequeno e o avô recolhendo folhas. Vaga-lumes iluminam discretamente os arbustos. Sem texto na imagem.",
+          "estimated_narration_seconds": 30
+        },
+        {
+          "order": 2,
+          "title": "As pequenas luzes",
+          "text": "Quando a noite chegou, Lia chamou os vizinhos para conhecer o jardim. Cada pessoa trouxe uma muda de flor.\n\nE Lia entendeu: a luz mais bonita era aquela que todos ajudavam a cuidar.",
+          "illustration_description": "O mesmo jardim ao anoitecer, com os personagens reunidos e pequenas flores recém-plantadas. Atmosfera acolhedora, sem elementos de interface.",
+          "estimated_narration_seconds": 30
+        }
+      ]
+    }
+  ]
+}

@@ -7,6 +7,7 @@ export type StoryNarration = { src: string; duration?: number };
 export type StoryMusic = { src: string; loop: boolean };
 export type StoryAudioSettings = { backgroundMusic?: StoryMusic };
 export type StoryPagePresentation = {
+  composition?: import('../lib/sceneComposition').SceneComposition;
   textAlignment?: 'start' | 'center' | 'end';
   textSize?: 'default' | 'large';
   textPosition?: 'top-left' | 'top-center' | 'top-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';

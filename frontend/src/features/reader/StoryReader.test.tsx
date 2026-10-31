@@ -65,10 +65,12 @@ describe('StoryReader', () => {
   it('revela o texto antes de avançar, transita de capítulo e permite concluir e reler', () => {
     openReader();
     expect(progress()).toHaveAttribute('aria-valuenow', '1');
-    expect(screen.getByRole('button', { name: 'Mostrar todo o texto' })).toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'Mostrar todo o texto' })).not.toBeInTheDocument();
+    expect(screen.getByLabelText(story.chapters[0].pages[0].text)).toHaveAttribute('data-revealed', 'false');
 
     fireEvent.click(screen.getByRole('button', { name: 'Próxima cena' }));
     expect(screen.queryByRole('button', { name: 'Mostrar todo o texto' })).not.toBeInTheDocument();
+    expect(screen.getByLabelText(story.chapters[0].pages[0].text)).toHaveAttribute('data-revealed', 'true');
     expect(progress()).toHaveAttribute('aria-valuenow', '1');
     fireEvent.click(screen.getByRole('button', { name: 'Próxima cena' }));
     expect(progress()).toHaveAttribute('aria-valuenow', '2');
@@ -107,7 +109,7 @@ describe('StoryReader', () => {
 
   it('preserva a posição ao alternar os modos e salva a preferência de apresentação', () => {
     const firstMount = openReader();
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar todo o texto' }));
+    fireEvent.click(screen.getByLabelText(story.chapters[0].pages[0].text));
     fireEvent.click(screen.getByRole('button', { name: 'Próxima cena' }));
     expect(progress()).toHaveAttribute('aria-valuenow', '2');
 
@@ -155,45 +157,27 @@ describe('StoryReader', () => {
     expect(screen.getByRole('slider', { name: /Tamanho do texto/ })).toHaveValue('24');
   });
 
-  it('avança automaticamente após a leitura e para na mudança de capítulo', () => {
-    vi.useFakeTimers();
-    openReader();
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar todo o texto' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Iniciar avanço automático' }));
-
-    tick(999);
-    expect(progress()).toHaveAttribute('aria-valuenow', '1');
-    tick(1);
-    expect(progress()).toHaveAttribute('aria-valuenow', '2');
-    tick(1000);
-    const transition = screen.getByRole('dialog', { name: 'Um encontro' });
-    expect(progress()).toHaveAttribute('aria-valuenow', '2');
-    expect(screen.getByRole('button', { name: 'Iniciar avanço automático' })).toBeInTheDocument();
-    tick(10_000);
-    expect(progress()).toHaveAttribute('aria-valuenow', '2');
-    fireEvent.click(within(transition).getByRole('button', { name: 'Continuar a história' }));
-    tick(10_000);
-    expect(progress()).toHaveAttribute('aria-valuenow', '3');
-    expect(screen.queryByRole('dialog', { name: 'E assim termina esta aventura.' })).not.toBeInTheDocument();
+  it('avança exclusivamente por ação manual, inclusive entre capítulos e no encerramento', () => {
+    vi.useFakeTimers(); openReader();
+    expect(screen.queryByRole('button', { name: /avanço automático/ })).not.toBeInTheDocument();
+    tick(20_000); expect(progress()).toHaveAttribute('aria-valuenow','1');
+    fireEvent.click(screen.getByRole('button',{name:'Próxima cena'}));
+    expect(progress()).toHaveAttribute('aria-valuenow','2');
+    tick(20_000); expect(progress()).toHaveAttribute('aria-valuenow','2');
+    fireEvent.click(screen.getByRole('button',{name:'Próxima cena'}));
+    const transition=screen.getByRole('dialog',{name:'Um encontro'});
+    tick(20_000);expect(progress()).toHaveAttribute('aria-valuenow','2');
+    fireEvent.click(within(transition).getByRole('button',{name:'Continuar a história'}));
+    tick(20_000);expect(progress()).toHaveAttribute('aria-valuenow','3');
+    expect(screen.queryByRole('dialog',{name:'E assim termina esta aventura.'})).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button',{name:'Concluir história'}));
+    expect(screen.getByRole('dialog',{name:'E assim termina esta aventura.'})).toBeInTheDocument();
   });
-
-  it('pausa o temporizador na aba oculta e reinicia a contagem ao retornar', () => {
-    vi.useFakeTimers();
-    const visibility = vi.spyOn(document, 'hidden', 'get').mockReturnValue(false);
-    openReader();
-    fireEvent.click(screen.getByRole('button', { name: 'Mostrar todo o texto' }));
-    fireEvent.click(screen.getByRole('button', { name: 'Iniciar avanço automático' }));
-    tick(500);
-
-    visibility.mockReturnValue(true);
-    fireEvent(document, new Event('visibilitychange'));
-    tick(5000);
-    expect(progress()).toHaveAttribute('aria-valuenow', '1');
-    visibility.mockReturnValue(false);
-    fireEvent(document, new Event('visibilitychange'));
-    tick(999);
-    expect(progress()).toHaveAttribute('aria-valuenow', '1');
-    tick(1);
-    expect(progress()).toHaveAttribute('aria-valuenow', '2');
+  it('mantém a cena ao ocultar a aba e retornar, sem temporizador de navegação', () => {
+    vi.useFakeTimers(); const visibility=vi.spyOn(document,'hidden','get').mockReturnValue(false);
+    openReader();tick(2000);
+    visibility.mockReturnValue(true);fireEvent(document,new Event('visibilitychange'));tick(20_000);
+    visibility.mockReturnValue(false);fireEvent(document,new Event('visibilitychange'));tick(20_000);
+    expect(progress()).toHaveAttribute('aria-valuenow','1');
   });
 });

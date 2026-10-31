@@ -1,0 +1,308 @@
+{
+  "$defs": {
+    "ImportChapter": {
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "title": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "pages": {
+          "items": {
+            "$ref": "#/$defs/ImportPage"
+          },
+          "maxItems": 500,
+          "minItems": 1,
+          "title": "Pages",
+          "type": "array"
+        }
+      },
+      "required": [
+        "order",
+        "title",
+        "pages"
+      ],
+      "title": "ImportChapter",
+      "type": "object"
+    },
+    "ImportPage": {
+      "additionalProperties": false,
+      "properties": {
+        "order": {
+          "minimum": 1,
+          "title": "Order",
+          "type": "integer"
+        },
+        "title": {
+          "anyOf": [
+            {
+              "maxLength": 255,
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Title"
+        },
+        "text": {
+          "maxLength": 20000,
+          "minLength": 1,
+          "title": "Text",
+          "type": "string"
+        },
+        "illustration_description": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Illustration Description"
+        },
+        "estimated_narration_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 86400,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Narration Seconds"
+        }
+      },
+      "required": [
+        "order",
+        "text"
+      ],
+      "title": "ImportPage",
+      "type": "object"
+    },
+    "ImportStory": {
+      "additionalProperties": false,
+      "properties": {
+        "title": {
+          "maxLength": 255,
+          "minLength": 1,
+          "title": "Title",
+          "type": "string"
+        },
+        "slug": {
+          "maxLength": 180,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Slug",
+          "type": "string"
+        },
+        "collection_slug": {
+          "maxLength": 180,
+          "minLength": 1,
+          "pattern": "^[a-z0-9]+(?:-[a-z0-9]+)*$",
+          "title": "Collection Slug",
+          "type": "string"
+        },
+        "synopsis": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Synopsis",
+          "type": "string"
+        },
+        "description": {
+          "default": "",
+          "maxLength": 20000,
+          "title": "Description",
+          "type": "string"
+        },
+        "minimum_age": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Minimum Age"
+        },
+        "maximum_age": {
+          "anyOf": [
+            {
+              "minimum": 0,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Maximum Age"
+        },
+        "language": {
+          "default": "pt-BR",
+          "maxLength": 20,
+          "minLength": 2,
+          "title": "Language",
+          "type": "string"
+        },
+        "estimated_narration_seconds": {
+          "anyOf": [
+            {
+              "exclusiveMinimum": 0,
+              "maximum": 86400,
+              "type": "integer"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Estimated Narration Seconds"
+        },
+        "editorial": {
+          "$ref": "#/$defs/LiteraryMetadata"
+        }
+      },
+      "required": [
+        "title",
+        "slug",
+        "collection_slug"
+      ],
+      "title": "ImportStory",
+      "type": "object"
+    },
+    "LiteraryMetadata": {
+      "additionalProperties": false,
+      "properties": {
+        "author": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Author"
+        },
+        "literary_origin": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Literary Origin"
+        },
+        "reference_work": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference Work"
+        },
+        "reference_version": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Reference Version"
+        },
+        "editorial_notes": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Editorial Notes"
+        },
+        "copyright_notes": {
+          "anyOf": [
+            {
+              "maxLength": 20000,
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Copyright Notes"
+        }
+      },
+      "title": "LiteraryMetadata",
+      "type": "object"
+    }
+  },
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "const": 1,
+      "title": "Schema Version",
+      "type": "integer"
+    },
+    "story": {
+      "$ref": "#/$defs/ImportStory"
+    },
+    "chapters": {
+      "items": {
+        "$ref": "#/$defs/ImportChapter"
+      },
+      "maxItems": 100,
+      "minItems": 1,
+      "title": "Chapters",
+      "type": "array"
+    }
+  },
+  "required": [
+    "schema_version",
+    "story",
+    "chapters"
+  ],
+  "title": "StoryImport",
+  "type": "object",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:jardim-de-papel:story-import:1",
+  "description": "Contrato oficial de importacao editorial. Regras adicionais de ordem e colecao sao validadas pelo servidor."
+}

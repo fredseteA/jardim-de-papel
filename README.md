@@ -6,6 +6,8 @@ Para executar o frontend, use `cd frontend`, `npm ci` e `npm run dev`. Verifica�
 
 Na Vercel, configure **Root Directory** como `frontend`. O arquivo `frontend/vercel.json` fornece o fallback para as rotas client-side. A configuração remota não é alterada pelo repositório.
 
+A instalação inicial como PWA, os ícones oficiais e os passos para testar no celular estão em [docs/pwa-installation.md](docs/pwa-installation.md). O site precisa estar publicado em HTTPS; não há deploy automático.
+
 O catálogo atual do frontend é demonstrativo. A API não é integrada a ele nesta etapa.
 
 ## Integração local frontend/backend

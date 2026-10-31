@@ -1,5 +1,6 @@
 import type { Story, StoryChapter, StoryPage } from '../../../types/story';
 import { getStoryPages } from './navigation';
+import { READER_TEXT_SIZE } from '../../../lib/readerTextSettings';
 
 export type ReaderMode = 'immersive' | 'traditional';
 export type ReaderTheme = 'light' | 'sepia' | 'dark';
@@ -13,7 +14,7 @@ export type ReaderSettings = {
 };
 
 export const DEFAULT_READER_SETTINGS: ReaderSettings = {
-  fontSize: 18,
+  fontSize: READER_TEXT_SIZE.default,
   lineHeight: 1.65,
   theme: 'light',
   alignment: 'left',
@@ -181,7 +182,7 @@ export function clearProgress(storyId: string, storage: ReaderStorage | null = g
 function normalizeSettings(value: unknown): ReaderSettings {
   if (!isRecord(value)) return { ...DEFAULT_READER_SETTINGS };
   const fontSize = typeof value.fontSize === 'number' && Number.isFinite(value.fontSize)
-    ? Math.min(28, Math.max(14, value.fontSize)) : DEFAULT_READER_SETTINGS.fontSize;
+    ? Math.min(READER_TEXT_SIZE.max, Math.max(READER_TEXT_SIZE.min, value.fontSize)) : DEFAULT_READER_SETTINGS.fontSize;
   const lineHeight = typeof value.lineHeight === 'number' && Number.isFinite(value.lineHeight)
     ? Math.min(2.2, Math.max(1.3, value.lineHeight)) : DEFAULT_READER_SETTINGS.lineHeight;
   const theme = value.theme === 'light' || value.theme === 'sepia' || value.theme === 'dark'

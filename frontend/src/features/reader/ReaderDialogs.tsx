@@ -1,3 +1,4 @@
+import { READER_TEXT_SIZE } from '../../lib/readerTextSettings';
 import { useEffect, useRef } from 'react';
 import { X } from 'lucide-react';
 import type { StoryChapter } from '../../types/story';
@@ -51,7 +52,7 @@ export function ReaderDialogs({ open, chapters, currentChapterId, settings, hasN
         <button type="button" aria-current={chapter.id === currentChapterId ? 'true' : undefined} onClick={() => onSelectChapter(chapter.id)}><span>Capítulo {index + 1}</span><strong>{chapter.title}</strong></button>
       </li>)}</ol> : <div className={styles.settings}>
         <p>Personalize sua experiência de leitura.</p>
-        <label>Tamanho do texto <output>{settings.fontSize}px</output><input aria-label="Tamanho do texto" type="range" min="14" max="28" step="1" value={settings.fontSize} onChange={(event) => onSettingsChange({ ...settings, fontSize: Number(event.target.value) })} /></label>
+        <label>Tamanho do texto <output>{settings.fontSize}px</output><input aria-label="Tamanho do texto" type="range" min={READER_TEXT_SIZE.min} max={READER_TEXT_SIZE.max} step={READER_TEXT_SIZE.step} value={settings.fontSize} onChange={(event) => onSettingsChange({ ...settings, fontSize: Number(event.target.value) })} /></label>
         <label>Contraste do texto <select value={settings.contrast} onChange={(event) => onSettingsChange({ ...settings, contrast: event.target.value as ReaderSettings['contrast'] })}><option value="auto">Automático</option><option value="dark">Escuro</option><option value="light">Claro</option></select></label>
         <label><input type="checkbox" checked={settings.reduceMotion} onChange={(event) => onSettingsChange({ ...settings, reduceMotion: event.target.checked })} /> Reduzir movimentos</label>
         <label>Espaçamento entre linhas <output>{settings.lineHeight.toFixed(1)}</output><input aria-label="Espaçamento entre linhas" type="range" min="1.3" max="2.2" step="0.1" value={settings.lineHeight} onChange={(event) => onSettingsChange({ ...settings, lineHeight: Number(event.target.value) })} /></label>

@@ -99,9 +99,11 @@ class SceneMedia(Base):
 
 class User(Timestamped, Base):
     __tablename__ = "users"
+    __table_args__ = (CheckConstraint("role IN ('reader', 'admin')", name="ck_users_role"),)
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
     # Apenas identificador do provedor futuro; sem senha ou cadastro público nesta etapa.
     auth_provider_subject: Mapped[str | None] = mapped_column(String(255), unique=True)
+    role: Mapped[str] = mapped_column(String(20), default="reader", server_default="reader")
 
 class ReadingProfile(Timestamped, Base):
     __tablename__ = "reading_profiles"

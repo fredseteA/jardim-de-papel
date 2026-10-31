@@ -1,3 +1,7 @@
+import { AdminLayout, RequireAdmin } from '../features/admin/AdminLayout';
+import { AdminForgotPassword, AdminHome, AdminLogin, AdminResetPassword } from '../features/admin/AdminPages';
+import { AdminStories } from '../features/admin/AdminStories';
+import { AdminMedia } from '../features/admin/AdminMedia';
 import { createBrowserRouter } from 'react-router-dom';
 import { AppShell } from '../components/layout/AppShell';
 import { CollectionPage } from '../pages/CollectionPage';
@@ -8,4 +12,4 @@ import { NotFoundPage } from '../pages/NotFoundPage';
 import { ReaderPage } from '../pages/ReaderPage';
 import { ProfilePage } from '../pages/ProfilePage';
 import { StoryPage } from '../pages/StoryPage';
-export const router = createBrowserRouter([{ element: <AppShell />, children: [{ path: '/', element: <HomePage /> }, { path: '/biblioteca', element: <LibraryPage /> }, { path: '/colecoes', element: <CollectionsPage /> }, { path: '/colecoes/:slug', element: <CollectionPage /> }, { path: '/perfil', element: <ProfilePage /> }, { path: '/historias/:slug', element: <StoryPage /> }, { path: '/historias/:slug/ler', element: <ReaderPage /> }, { path: '*', element: <NotFoundPage /> }] }]);
+export const router = createBrowserRouter([{ path: '/admin', element: <AdminLayout />, children: [{ path: 'login', element: <AdminLogin /> }, { path: 'forgot-password', element: <AdminForgotPassword /> }, { path: 'reset-password', element: <AdminResetPassword /> }, { element: <RequireAdmin />, children: [{ index: true, element: <AdminHome /> }, { path: 'stories', element: <AdminStories /> }, { path: 'media', element: <AdminMedia /> }] }] }, { element: <AppShell />, children: [{ path: '/', element: <HomePage /> }, { path: '/biblioteca', element: <LibraryPage /> }, { path: '/colecoes', element: <CollectionsPage /> }, { path: '/colecoes/:slug', element: <CollectionPage /> }, { path: '/perfil', element: <ProfilePage /> }, { path: '/historias/:slug', element: <StoryPage /> }, { path: '/historias/:slug/ler', element: <ReaderPage /> }, { path: '*', element: <NotFoundPage /> }] }]);

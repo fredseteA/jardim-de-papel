@@ -1,5 +1,5 @@
 import { ArrowLeft, BookOpen, Clock3, Heart, UsersRound } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import type { Story, StoryIllustration } from '../../types/story';
 import { getEstimatedReadingMinutes } from '../../lib/readingTime';
 import { useFavorites } from '../profile/useFavorites';
@@ -32,6 +32,8 @@ function StoryTitle({ title }: { title: string }) {
 
 export function StoryOpening({ story }: { story: Story }) {
   const navigate = useNavigate();
+  const location = useLocation();
+  const returnTo = typeof (location.state as { returnTo?: unknown } | null)?.returnTo === 'string' && (location.state as { returnTo: string }).returnTo.startsWith('/') && !(location.state as { returnTo: string }).returnTo.startsWith('//') ? (location.state as { returnTo: string }).returnTo : '/biblioteca';
   const { favoriteIds, toggleFavorite } = useFavorites();
   const isFavorite = favoriteIds.includes(story.id);
   const cover = story.coverImage?.mobile ?? story.coverImage?.desktop;
@@ -40,11 +42,10 @@ export function StoryOpening({ story }: { story: Story }) {
   const progress = readProgress(story);
   const startReading = (restart = false) => {
     if (restart || progress?.completed) clearProgress(story.id);
-    navigate(`/historias/${story.slug}/ler`);
+    navigate(`/historias/${story.slug}/ler`, { state: { returnTo, suggestOrientation: true } });
   };
   const goBack = () => {
-    if (typeof window.history.state?.idx === 'number' && window.history.state.idx > 0) navigate(-1);
-    else navigate('/biblioteca', { replace: true });
+    navigate(returnTo, { replace: true });
   };
 
   return <article className={styles.page}>
