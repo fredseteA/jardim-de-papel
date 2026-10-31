@@ -1,0 +1,7 @@
+// Isolated development fixture. No production route or database mutation.
+import { createRoot } from 'react-dom/client';
+import '../../src/styles/globals.css';
+import { CompositionEditor } from '../../src/features/admin/CompositionEditor';
+import type { AdminScene } from '../../src/features/admin/editorial';
+const scene: AdminScene = { id: 'visual-demo', chapter_id: 'visual-demo', display_order: 0, title: 'Cena demonstrativa', narrative_text: 'Em uma manhã ensolarada, Chapeuzinho Vermelho preparou sua cesta. A floresta guardava novos caminhos e muitas descobertas. Ela respirou fundo e começou sua aventura.', estimated_duration_seconds: null, text_position: 'top', text_animation: 'fade', transition_type: 'fade', presentation_config: {}, media: [{ id: 'demo-link', scene_id: 'visual-demo', media_asset_id: 'demo-image', role: 'illustration', display_order: 0, configuration: {}, asset: { id: 'demo-image', storage_provider: 'frontend', storage_bucket: 'assets', storage_path: 'assets/stories/chapeuzinho-vermelho/cover/cover-hero.webp', media_type: 'image', mime_type: 'image/webp', file_size: null, asset_metadata: {} } }] };
+if (import.meta.env.DEV) createRoot(document.getElementById('root')!).render(<CompositionEditor demo scene={scene} previewScene={scene} storyId="visual-demo" slug="visual-demo" storyTitle="Teste visual demonstrativo" onSaved={() => {}} onClose={() => location.reload()} />);

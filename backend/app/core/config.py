@@ -1,11 +1,17 @@
 from functools import lru_cache
-from pydantic import SecretStr
+from pydantic import Field, SecretStr
 from sqlalchemy.engine import make_url
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 class Settings(BaseSettings):
     model_config = SettingsConfigDict(env_file=".env", extra="ignore")
     database_url: SecretStr | None = None
+    supabase_url: str | None = None
+    supabase_jwt_audience: str = "authenticated"
+    supabase_jwt_secret: SecretStr | None = None
+    supabase_service_role_key: SecretStr | None = None
+    supabase_storage_bucket: str = "editorial-media"
+    media_signed_url_seconds: int = Field(default=900, ge=60, le=3600)
     cors_origins: list[str] = ["http://localhost:5173", "http://127.0.0.1:5173"]
 
     def sqlalchemy_url(self) -> str:

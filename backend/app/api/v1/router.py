@@ -2,12 +2,15 @@ from typing import Annotated
 import re
 import unicodedata
 from difflib import SequenceMatcher
+from fastapi.responses import RedirectResponse
+from uuid import UUID
 from fastapi import APIRouter, Depends, HTTPException, Query
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 from app.core.database import get_session
 from app.models import Chapter, Collection, CollectionStory, MediaAsset, Scene, SceneMedia, Story
 from app.api.v1.schemas import ChapterOut, ChapterWithScenes, CollectionOut, CollectionPage, ReadingStory, SceneMediaOut, SceneOut, StoryOut, StoryPage
+from app.modules.stories import media_service
 
 router = APIRouter(prefix="/api/v1")
 DB = Annotated[Session, Depends(get_session)]
@@ -26,7 +29,7 @@ def enrich_stories(session: Session, stories: list[Story]):
     asset_ids = {x for s in stories for x in (s.cover_asset_id, s.hero_asset_id) if x}
     assets = {a.id: a for a in session.scalars(select(MediaAsset).where(MediaAsset.id.in_(asset_ids))).all()} if asset_ids else {}
     pairs = session.execute(select(CollectionStory.story_id, Collection).join(Collection, Collection.id == CollectionStory.collection_id).where(CollectionStory.story_id.in_(ids), Collection.status == 'published').order_by(CollectionStory.display_order, Collection.id)).all()
-    return [{**StoryOut.model_validate(s).model_dump(), 'cover_asset': assets.get(s.cover_asset_id), 'hero_asset': assets.get(s.hero_asset_id), 'collections': [c for sid, c in pairs if sid == s.id]} for s in stories]
+    return [{**StoryOut.model_validate(s).model_dump(), 'cover_asset': media_service.media_out(assets[s.cover_asset_id], public=True) if s.cover_asset_id in assets else None, 'hero_asset': media_service.media_out(assets[s.hero_asset_id], public=True) if s.hero_asset_id in assets else None, 'collections': [c for sid, c in pairs if sid == s.id]} for s in stories]
 
 def normalize(value: str) -> str:
     value = unicodedata.normalize('NFKD', value.lower())
@@ -53,7 +56,7 @@ def matches_query(story: Story, query: str, categories: str = '') -> bool:
 @router.get("/collections", response_model=CollectionPage)
 def list_collections(session: DB, limit: Limit = 20, offset: Offset = 0):
     items = session.scalars(select(Collection).where(Collection.status == "published").order_by(Collection.display_order, Collection.id).limit(limit).offset(offset)).all()
-    items = [{**CollectionOut.model_validate(c).model_dump(), "cover_asset": session.get(MediaAsset, c.cover_asset_id) if c.cover_asset_id else None} for c in items]
+    items = [{**CollectionOut.model_validate(c).model_dump(), "cover_asset": media_service.media_out(session.get(MediaAsset, c.cover_asset_id), public=True) if c.cover_asset_id else None} for c in items]
     return {"items": items, "limit": limit, "offset": offset}
 
 @router.get("/collections/{slug}", response_model=CollectionOut)
@@ -62,7 +65,7 @@ def collection_detail(slug: str, session: DB):
     if item is None:
         raise HTTPException(status_code=404, detail="Coleção não encontrada")
     data = CollectionOut.model_validate(item).model_dump()
-    data["cover_asset"] = session.get(MediaAsset, item.cover_asset_id) if item.cover_asset_id else None
+    data["cover_asset"] = media_service.media_out(session.get(MediaAsset, item.cover_asset_id), public=True) if item.cover_asset_id else None
     return data
 
 @router.get("/stories", response_model=StoryPage)
@@ -86,8 +89,8 @@ def list_stories(session: DB, limit: Limit = 20, offset: Offset = 0, collection:
 def story_detail(slug: str, session: DB):
     story = published_story(session, slug)
     data = StoryOut.model_validate(story).model_dump()
-    data["cover_asset"] = session.get(MediaAsset, story.cover_asset_id) if story.cover_asset_id else None
-    data["hero_asset"] = session.get(MediaAsset, story.hero_asset_id) if story.hero_asset_id else None
+    data["cover_asset"] = media_service.media_out(session.get(MediaAsset, story.cover_asset_id), public=True) if story.cover_asset_id else None
+    data["hero_asset"] = media_service.media_out(session.get(MediaAsset, story.hero_asset_id), public=True) if story.hero_asset_id else None
     data["collections"] = session.scalars(select(Collection).join(CollectionStory, CollectionStory.collection_id == Collection.id).where(CollectionStory.story_id == story.id, Collection.status == "published").order_by(CollectionStory.display_order, Collection.id)).all()
     return data
 
@@ -104,12 +107,30 @@ def story_reading(slug: str, session: DB):
     scene_ids = [scene.id for scene in scenes]
     media = session.execute(select(SceneMedia, MediaAsset).join(MediaAsset, SceneMedia.media_asset_id == MediaAsset.id).where(SceneMedia.scene_id.in_(scene_ids)).order_by(SceneMedia.display_order, SceneMedia.id)).all() if scene_ids else []
     result = StoryOut.model_validate(story).model_dump()
-    result["cover_asset"] = session.get(MediaAsset, story.cover_asset_id) if story.cover_asset_id else None
-    result["hero_asset"] = session.get(MediaAsset, story.hero_asset_id) if story.hero_asset_id else None
+    result["cover_asset"] = media_service.media_out(session.get(MediaAsset, story.cover_asset_id), public=True) if story.cover_asset_id else None
+    result["hero_asset"] = media_service.media_out(session.get(MediaAsset, story.hero_asset_id), public=True) if story.hero_asset_id else None
     result["collections"] = session.scalars(select(Collection).join(CollectionStory, CollectionStory.collection_id == Collection.id).where(CollectionStory.story_id == story.id, Collection.status == "published").order_by(CollectionStory.display_order, Collection.id)).all()
     def scene_out(scene: Scene) -> SceneOut:
         content = SceneOut.model_validate(scene)
-        content.media = [SceneMediaOut(role=link.role, display_order=link.display_order, configuration=link.configuration, asset=asset) for link, asset in media if link.scene_id == scene.id]
+        content.media = [SceneMediaOut(role=link.role, display_order=link.display_order, configuration=link.configuration, asset=media_service.media_out(asset, public=True)) for link, asset in media if link.scene_id == scene.id]
         return content
     result["chapters"] = [ChapterWithScenes(**ChapterOut.model_validate(chapter).model_dump(), scenes=[scene_out(scene) for scene in scenes if scene.chapter_id == chapter.id]) for chapter in chapters]
     return result
+
+@router.get("/media/{asset_id}/content", include_in_schema=False)
+def public_media(asset_id: UUID, session: DB):
+    # Every access checks publication again; knowing an ID never grants access.
+    scene_reference = select(SceneMedia.media_asset_id).join(Scene, Scene.id == SceneMedia.scene_id).join(Chapter, Chapter.id == Scene.chapter_id).join(Story, Story.id == Chapter.story_id).where(Story.status == 'published')
+    allowed = session.scalar(select(MediaAsset).where(MediaAsset.id == asset_id, (
+        MediaAsset.id.in_(scene_reference) |
+        MediaAsset.id.in_(select(Story.cover_asset_id).where(Story.status == 'published')) |
+        MediaAsset.id.in_(select(Story.hero_asset_id).where(Story.status == 'published')) |
+        MediaAsset.id.in_(select(Collection.cover_asset_id).where(Collection.status == 'published'))
+    )))
+    if allowed is None:
+        raise HTTPException(status_code=404, detail="Mídia não encontrada")
+    url = media_service.media_out(allowed).resolved_url
+    if not url:
+        raise HTTPException(status_code=503, detail="Mídia temporariamente indisponível")
+    return RedirectResponse(url, headers={"Cache-Control": "no-store"})
+

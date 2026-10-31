@@ -13,10 +13,12 @@ class MediaOut(ORMModel):
     storage_path: str
     media_type: str
     mime_type: str
+    file_size: int | None
     width: int | None
     height: int | None
     duration_seconds: int | None
     asset_metadata: dict[str, Any]
+    resolved_url: str | None = None
 
 class CollectionOut(ORMModel):
     id: UUID
